@@ -3,6 +3,7 @@
 using namespace std;
 using namespace chrono;
 
+// timer, pra gente controlar por quanto tempo o codigo roda
 struct timer : high_resolution_clock {
 	const time_point start;
 	timer(): start(now()) {}
@@ -11,10 +12,11 @@ struct timer : high_resolution_clock {
 	}
 };
 
+// gerador de numeros random
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 // alfa1 = 5%, alfa2 = 10%
-const int alfa1 = 5, alfa2 = 10, minutos = 1, infinity = 100000;
+const int alfa1 = 10, alfa2 = 20, segundos = 20, infinity = 100000;
 int n, W;
 vector<int> w;
 vector<vector<int>> a;
@@ -32,16 +34,61 @@ vector<pair<int, int>> build_candidates(int solution_weight, set<int> &solution)
     return candidates;
 }
 
-// todo
 set<int> random_plus_greedy_construction(int p) {
-    return set<int>();
+    set<int> solution;
+    int solution_weight = 0;
+    vector<pair<int, int>> candidates = build_candidates(solution_weight, solution);
+    while (!candidates.empty()) {
+        int id;
+        if (solution.size() < p) {
+            // take an item randomly
+            id = rng() % ((int)candidates.size());
+        }
+        else {
+            // take the best item
+            id = 0;
+            for (int i = 1; i < (int)candidates.size(); i++) {
+                if (candidates[i].second > candidates[id].second) {
+                    id = i;
+                }
+            }
+        }
+        solution.insert(candidates[id].first);
+        solution_weight += w[candidates[id].first];
+        candidates = build_candidates(solution_weight, solution);
+    }
+    return solution;
 }
 
 // todo 
-set<int> samples_greedy_construction(int p) {
-    return set<int>();
+set<int> sampled_greedy_construction(int p) {
+    set<int> solution;
+    int solution_weight = 0;
+    vector<pair<int, int>> candidates = build_candidates(solution_weight, solution);
+    while (!candidates.empty()) {
+        if (candidates.size() > p) {
+            vector<int> random_value(n);
+            for (int &x : random_value) x = rng();
+            sort(candidates.begin(), candidates.end(), [&](pair<int, int> a, pair<int, int> b) {
+                return random_value[a.first] < random_value[b.first];
+            });
+            while (candidates.size() > p) candidates.pop_back();
+        }
+        // take the best item
+        int id = 0;
+        for (int i = 1; i < (int)candidates.size(); i++) {
+            if (candidates[i].second > candidates[id].second) {
+                id = i;
+            }
+        }
+        solution.insert(candidates[id].first);
+        solution_weight += w[candidates[id].first];
+        candidates = build_candidates(solution_weight, solution);
+    }
+    return solution;
 }
 
+// vanilla greedy randomized construction
 set<int> standard_greedy_randomized_construction(int alfa) {
     set<int> solution;
     int solution_weight = 0;
@@ -77,6 +124,7 @@ int evaluate(set<int> &solution) {
     return value;
 }
 
+// fills the solution of a local search
 void fill_solution(set<int> &solution) {
     int solution_weight = 0;
     for (int x : solution) solution_weight += w[x];
@@ -93,7 +141,8 @@ void fill_solution(set<int> &solution) {
 }
 
 // The neighbourhood of a solution is any solution that erases at most one item
-// And then fills the bag with the items with the best density
+// After we erase an item, we can add multiple items
+
 int local_search_best_improving(set<int> &solution) {
     int best_value = evaluate(solution);
     for (int x : solution) {
@@ -124,13 +173,16 @@ int grasp() {
 
     // We start with the empty set, with value 0
     int best_solution = 0, cnt = 0;
-    while (T() < 10000) {
-        set<int> solution = standard_greedy_randomized_construction(20);
-        // best_solution = max(best_solution, evaluate(solution));
-        best_solution = max(best_solution, local_search_best_improving(solution));
+    while (T() < 1000 * segundos) {
+
+        // aqui voce escolhe entre standard, random_plus_greedy e sample_greedy
+        // tambem escolhe o valor de alfa ou p
+        set<int> solution = random_plus_greedy_construction(7);
+
+        // aqui voce escolhe first improving ou best improving
+        best_solution = max(best_solution, local_search_first_improving(solution));
         cnt++;
     }
-    cout << cnt << '\n';
     return best_solution;
 }
 

@@ -1,0 +1,108 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx} % Required for inserting images
+
+\usepackage[draft]{hyperref}
+\usepackage{xspace}
+
+\newcommand{\outDegree}{\ensuremath{\mathit{outDegree}}\xspace}
+\newcommand{\inDegree}{\ensuremath{\mathit{inDegree}}\xspace}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{setspace}
+\usepackage{amsthm}
+
+\usepackage{cfr-lm}
+\usepackage{microtype}
+
+\newtheorem{lemma}{Lema}[section]
+
+\usepackage{array, makecell, multirow,
+            ltablex}            % <--- doesn't change anything, 
+                                % however for keep X column features
+                                % you should add (before table) \keepXColumns 
+\newcolumntype{B}{>{\global\let\currentrowstyle\relax}}
+\newcolumntype{^}{>{\currentrowstyle}}
+\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}%
+                          #1\ignorespaces}
+\newcolumntype{C}{>{\centering\arraybackslash}X}   % <-- new
+\usepackage{siunitx}
+
+\title{MC$859$ - A$1$}
+\author{Andreas Cisi Ramos $246955$ \\
+Bernardo Panka Archegas $246970$ \\
+Bruno Amaral Teixeira de Freitas $246983$ \\}
+\date{}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\begin{document}
+\doublespacing
+\maketitle
+
+\section{Introdução}
+
+Nosso objetivo é relatar o processo do nosso grupo de aplicação da meta heurística do GRASP ao problema MAX-KQBF, que envolve maximizar uma função binária quadrática sob uma restrição de capacidade. O desafio é encontrar um conjunto de variáveis cuja soma dos pesos não exceda um limite dado, enquanto se maximiza o valor da função.
+
+\section{Descrição do Problema}
+
+O problema MAX-KQBF pode ser formalmente descrito como segue: Dada uma capacidade $W \in \mathbb{R}$ e um peso $w_i \in \mathbb{R}$ associado a cada variável $x_i$, deseja-se maximizar uma função binária quadrática sujeita à condição de que a soma dos pesos das variáveis selecionadas não exceda a capacidade $W$. Este problema é uma extensão do clássico problema da mochila, incorporando elementos de interações entre pares de itens através da função binária quadrática.
+
+Esse problema já é NP-difícil mesmo se removermos a restrição de capacidade. Nesse caso, estamos lidando com uma versão ainda mais restrita.
+
+\section{GRASP e nossa implementação}
+
+O GRASP (Greedy Randomized Adaptive Search Procedure) é uma meta-heurística para encontrar soluções aproximadas para problemas de otimização difícil. Nossa implementação do GRASP para o MAX-KQBF consiste em duas fases principais: construção e busca local. Na fase de construção, geramos soluções iniciais de forma gulosa e aleatória, garantindo diversidade enquanto mantemos a qualidade das soluções. Na fase de busca local, refinamos essas soluções explorando seus vizinhos até alcançar um ótimo local. A alternância entre construção gulosa e busca local permite ao GRASP explorar eficientemente o espaço de soluções, balanceando construções aleatórias e determinísticas.
+
+Escrevam o resto aí
+
+\subsection{Fase de construção}
+
+Aqui tem que explicar a construção vanilla e os dois métodos alternativos que eu codei:
+sampled greedy e random plus greedy
+
+\subsection{Fase de busca local}
+
+Aqui que eu acho que vocês vão ter que codar, achei que minha solução não ficou tão boa pelos resultados que tive.
+
+No momento eu defini vizinhança como qualquer solução que delete no máximo um elemento, essa definição acredito que seja boa. No entanto, depois que eu deleto um elemento, eu estou adicionando elementos até não dar mais baseado no valor inicial, acho que vocês conseguem pensar em algo mais elaborado.
+
+Outra coisa que pensei também é que podemos testar parar de adicionar itens se todos os itens vão adicionar valor negativo. No momento eu sempre adiciono enquanto tem espaço.
+
+\section{Resultados}
+
+Escrevam aqui quais configurações vocês testaram, o que deu certo, o que deu errado, o que teve que ser rodado de novo, etc
+
+Coloquem várias tabelas (vai ocupar bastante espaço já que são 7 instâncias * 5 configurações).
+
+
+\section{Conclusão}
+
+Escrever uma conclusão baseada nos resultados
+
+\end{document}
