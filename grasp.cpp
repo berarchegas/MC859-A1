@@ -32,7 +32,17 @@ vector<pair<int, int>> build_candidates(int solution_weight, set<int> &solution)
     return candidates;
 }
 
-set<int> greedy_randomized_construction(int alfa) {
+// todo
+set<int> random_plus_greedy_construction(int p) {
+    return set<int>();
+}
+
+// todo 
+set<int> samples_greedy_construction(int p) {
+    return set<int>();
+}
+
+set<int> standard_greedy_randomized_construction(int alfa) {
     set<int> solution;
     int solution_weight = 0;
     vector<pair<int, int>> candidates = build_candidates(solution_weight, solution);
@@ -84,7 +94,7 @@ void fill_solution(set<int> &solution) {
 
 // The neighbourhood of a solution is any solution that erases at most one item
 // And then fills the bag with the items with the best density
-int local_search(set<int> &solution) {
+int local_search_best_improving(set<int> &solution) {
     int best_value = evaluate(solution);
     for (int x : solution) {
         set<int> solution_copy = solution;
@@ -95,15 +105,29 @@ int local_search(set<int> &solution) {
     return best_value;
 }
 
+int local_search_first_improving(set<int> &solution) {
+    int best_value = evaluate(solution);
+    for (int x : solution) {
+        set<int> solution_copy = solution;
+        solution_copy.erase(x);
+        fill_solution(solution_copy);
+        int value = evaluate(solution_copy);
+        if (value > best_value) {
+            return value;
+        }
+    }
+    return best_value;
+}
+
 int grasp() {
     timer T;
 
     // We start with the empty set, with value 0
     int best_solution = 0, cnt = 0;
     while (T() < 10000) {
-        set<int> solution = greedy_randomized_construction(20);
+        set<int> solution = standard_greedy_randomized_construction(20);
         // best_solution = max(best_solution, evaluate(solution));
-        best_solution = max(best_solution, local_search(solution));
+        best_solution = max(best_solution, local_search_best_improving(solution));
         cnt++;
     }
     cout << cnt << '\n';
