@@ -32,7 +32,7 @@
 \usepackage{siunitx}
 
 \title{MC$859$ - A$1$}
-\author{Andreas Cisi Ramos $246955$ \\
+\author{Andreas Cisi Ramos $246932$ \\
 Bernardo Panka Archegas $246970$ \\
 Bruno Amaral Teixeira de Freitas $246983$ \\}
 \date{}
@@ -83,8 +83,15 @@ Escrevam o resto aí
 
 \subsection{Fase de construção}
 
-Aqui tem que explicar a construção vanilla e os dois métodos alternativos que eu codei:
-sampled greedy e random plus greedy
+Para essa parte utilizamos três opções de algoritmos: a versão padrão, Greedy Randomized Construction, e dois métodos alternativos, Sampled Greedy Construction e Random Plus Greedy Construction.
+
+Na fase de construção padrão o conjunto de elementos candidatos é formado por todos os elementos do conjunto base que podem ser incorporados à solução parcial sem comprometer a construção de uma solução viável com os elementos restantes. A seleção do próximo elemento é baseada em uma função gulosa que avalia o custo incremental da sua inclusão na solução em construção. Os melhores elementos formam uma lista restrita de candidatos, de onde um é escolhido aleatoriamente para inclusão na solução parcial. Após a escolha, a lista é atualizada e os custos incrementais são recalculados. Esse processo continua até não haver mais candidatos disponíveis.
+
+Para o método alternativo Random Plus Greedy Construction  durante os primeiros \textit{p} passos da construção, o algoritmo introduz aleatoriedade na seleção dos elementos para construir uma solução parcial. Logo, o algoritmo escolhe os elementos candidatos de forma mais aleatória. Após os primeiros \textit{p} passos, o algoritmo muda para uma abordagem puramente gulosa. Nesta fase, a aleatoriedade é eliminada e o algoritmo seleciona os elementos candidatos com base em critérios gulosos, buscando otimizar a solução parcial de forma determinística.Pode-se controlar o equilíbrio entre a parte gulosa e aleatória alterando o valor do parâmetro \textit{p}. Valores maiores de \textit{p} estão associados a soluções mais aleatórias, enquanto valores menores resultam em soluções mais gulosas.
+
+Para o método alterativo Sampled Greedy assim como o método anterior também é  controlado por um parâmetro \textit{p}.Em cada etapa do processo de construção, o algoritmo constrói uma lista de candidatos restritos, amostrando aleatoriamente \textit{p} elementos do conjunto de candidatos C, no caso de \textit{p} ser maior que o número de elementos do conjunto, então todos os elementos do conjunto são selecionados. Cada elemento da lista restrita é avaliado pela função gulosa. O elemento com o menor valor dessa avaliação é adicionado à solução parcial. Esses dois passos são repetidos até que não haja mais elementos candidatos.O equilíbrio entre a parte gulosa e aleatória também pode ser controlado alterando o valor do parâmetro \textit{p}, ou seja, o número de elementos candidatos que são amostrados.
+
+
 
 \subsection{Fase de busca local}
 
