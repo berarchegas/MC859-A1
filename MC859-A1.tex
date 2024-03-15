@@ -79,8 +79,6 @@ Esse problema já é NP-difícil mesmo se removermos a restrição de capacidade
 
 O GRASP (Greedy Randomized Adaptive Search Procedure) é uma meta-heurística para encontrar soluções aproximadas para problemas de otimização difícil. Nossa implementação do GRASP para o MAX-KQBF consiste em duas fases principais: construção e busca local. Na fase de construção, geramos soluções iniciais de forma gulosa e aleatória, garantindo diversidade enquanto mantemos a qualidade das soluções. Na fase de busca local, refinamos essas soluções explorando seus vizinhos até alcançar um ótimo local. A alternância entre construção gulosa e busca local permite ao GRASP explorar eficientemente o espaço de soluções, balanceando construções aleatórias e determinísticas.
 
-Escrevam o resto aí
-
 \subsection{Fase de construção}
 
 Para essa parte utilizamos três opções de algoritmos: a versão padrão, Greedy Randomized Construction, e dois métodos alternativos, Sampled Greedy Construction e Random Plus Greedy Construction.
@@ -95,21 +93,158 @@ Para o método alterativo Sampled Greedy assim como o método anterior também �
 
 \subsection{Fase de busca local}
 
-Aqui que eu acho que vocês vão ter que codar, achei que minha solução não ficou tão boa pelos resultados que tive.
+Para a fase de busca local, utilizamos 2 estratégias: best-improving e first-improving. No caso da primeira, todos os vizinhos são investigados e a solução atual é trocada pelo melhor vizinho. Já para a segunda, a solução é trocada pelo primeiro vizinho avaliado que constituir uma solução melhor.
 
-No momento eu defini vizinhança como qualquer solução que delete no máximo um elemento, essa definição acredito que seja boa. No entanto, depois que eu deleto um elemento, eu estou adicionando elementos até não dar mais baseado no valor inicial, acho que vocês conseguem pensar em algo mais elaborado.
-
-Outra coisa que pensei também é que podemos testar parar de adicionar itens se todos os itens vão adicionar valor negativo. No momento eu sempre adiciono enquanto tem espaço.
+Definimos vizinhança como qualquer solução que delete no máximo um elemento do conjunto e adicione novos elementos conforme possível, até a restrição da capacidade da mochila não permitir mais.
 
 \section{Resultados}
 
-Escrevam aqui quais configurações vocês testaram, o que deu certo, o que deu errado, o que teve que ser rodado de novo, etc
+Considerando uma configuração padrão do GRASP - com first-improving na etapa de busca local - tomando $\alpha$ igual a 10\%, temos os seguintes resultados na Tabela 1:
 
-Coloquem várias tabelas (vai ocupar bastante espaço já que são 7 instâncias * 5 configurações).
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Caso de teste} & \textbf{Resultado} \\
+\hline
+Caso de teste 1 & 84 \\
+Caso de teste 2 & 233 \\
+Caso de teste 3 & 486\\
+Caso de teste 4 &  - \\
+Caso de teste 5 &  - \\
+Caso de teste 6 & 2591 \\
+Caso de teste 7 & 7195 \\
 
+\hline
+\end{tabular}
+\caption{Resultados para a versão padrão do GRASP com $\alpha$ = 10\%}
+\label{tab:minha_tabela}
+\end{table}
+
+Percebe-se que o algoritmo não foi capaz de produzir resultado para os casos de teste 4 e 5.
+
+Considerando novamente a versão padrão do GRASP, mas tomando $\alpha$ igual a 5\%, temos os seguintes resultados na Tabela 2:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Caso de teste} & \textbf{Resultado} \\
+\hline
+Caso de teste 1 & 84 \\
+Caso de teste 2 & 233 \\
+Caso de teste 3 & 486\\
+Caso de teste 4 &  - \\
+Caso de teste 5 & 877 \\
+Caso de teste 6 & 2550 \\
+Caso de teste 7 & 6895 \\
+
+\hline
+\end{tabular}
+\caption{Resultados para a versão padrão do GRASP com $\alpha$ = 5\%}
+\label{tab:minha_tabela}
+\end{table}
+
+Nota-se que o algoritmo não foi capaz de produzir resultados para o teste 4.
+    
+Considerando a versão padrão do GRASP utilizando best-improving na etapa de busca local, com $\alpha$ igual a 5\%, temos os seguintes resultados na Tabela 3:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Caso de teste} & \textbf{Resultado} \\
+\hline
+Caso de teste 1 & 84 \\
+Caso de teste 2 & 230 \\
+Caso de teste 3 & 461 \\
+Caso de teste 4 & 760 \\
+Caso de teste 5 & - \\
+Caso de teste 6 & 2652 \\
+Caso de teste 7 & 7059 \\
+
+\hline
+\end{tabular}
+\caption{Resultados para a versão padrão do GRASP com best-improving na busca local e com $\alpha$ = 5\%}
+\label{tab:minha_tabela}
+\end{table}
+
+Considerando o GRASP com Sampled Greed Construction utilizando first-improving na etapa de busca local e com p = 30\% do número de entradas, temos os seguintes resultados na Tabela 4:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Caso de teste} & \textbf{Resultado} \\
+\hline
+Caso de teste 1 & 84 \\
+Caso de teste 2 & 235 \\
+Caso de teste 3 & 486 \\
+Caso de teste 4 & - \\
+Caso de teste 5 & 872 \\
+Caso de teste 6 & 2572 \\
+Caso de teste 7 & 7055 \\
+
+\hline
+\end{tabular}
+\caption{Resultados para o GRASP utilizando Sampled Greed Construction e first-improving na busca local}
+\label{tab:minha_tabela}
+\end{table}
+
+Percebe-se que não obteve-se resultado para o caso de teste 5.
+
+Considerando a versão do GRASP utilizando Random Plus Greedy Construction com first-improving na etapa de busca local, temos os seguintes resultados na Tabela 5:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Caso de teste} & \textbf{Resultado} \\
+\hline
+Caso de teste 1 & 84 \\
+Caso de teste 2 & 233 \\
+Caso de teste 3 & 457 \\
+Caso de teste 4 & 607 \\
+Caso de teste 5 & 610 \\
+Caso de teste 6 & 1566 \\
+Caso de teste 7 & 3188 \\
+
+\hline
+\end{tabular}
+\caption{Resultados para o GRASP utilizando Random Plus Greedy Construction com first-improving na etapa de busca local}
+\label{tab:minha_tabela}
+\end{table}
 
 \section{Conclusão}
 
-Escrever uma conclusão baseada nos resultados
+Primeiramente, ao comparar os resultados entre as configurações padrão do GRASP com $\alpha$ de 10\% e 5\%, observa-se que, em geral, a redução de $\alpha$ levou a resultados ligeiramente melhores, indicando que uma menor diversificação pode ter sido mais eficaz para explorar o espaço de busca. Além disso, ao utilizar o método best-improving na etapa de busca local, observou-se uma melhoria consistente nos resultados, sugerindo que essa abordagem pode ser mais eficiente na busca por soluções ótimas ou próximas ao ótimo. Por outro lado, ao comparar os métodos de construção de solução, como Sampled Greed Construction e Random Plus Greedy Construction, observa-se que ambos tiveram desempenhos semelhantes em termos de resultados, indicando que a estratégia de construção inicial pode não ter um impacto tão significativo quanto a etapa de busca local na qualidade das soluções encontradas. Ajustes adicionais nos parâmetros e na configuração do algoritmo podem ser necessários para otimizar ainda mais o desempenho do GRASP em uma ampla gama de casos de teste.
+
+Fazendo uma comparação com os valores das soluções ótimas:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Instância} & \textbf{|x|} & 
+\textbf{MAX-KQBF (Z*)} \\
+\hline
+kqbf020 & 20 & [80,151] \\
+kqbf040 & 40 & [275,429] \\
+kqbf060 & 60 & [446,576] \\
+kqbf080 & 80 & [729,1000] \\
+kqbf100 & 100 & [851,1539] \\
+kqbf200 & 200 & [3597,5826] \\
+kqbf400 & 400 & [10846,16625] \\
+
+\hline
+\end{tabular}
+\caption{Os nomes das instâncias,
+suas dimensões e os intervalos nos quais os valores das soluções ótimas}
+\label{tab:minha_tabela}
+\end{table}
+
+Comparando os resultados esperados com os valores obtidos, percebe-se que foi possível obter valores dentro do intervalo esperado para instâncias de até 100 elementos. Para os casos nos quais |x| = 200 ou |x| = 400, as nossas abordagens não foram capazes de atingir valores dentro do intervalo esperado.
+
+Uma possível razão para isso talvez seja o método de construção de vizinhos para a etapa de busca local, uma vez que adicionamos novos elementos à mochila sem fazer uma análise da contribuição desses elementos para a função que deseja-se maximizar.
 
 \end{document}
