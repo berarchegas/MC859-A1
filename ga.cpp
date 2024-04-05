@@ -5,10 +5,10 @@ using namespace chrono;
 
 // Parameters of the Genetic Algorithm
 // You only need to change stuff here to test
-// mutationProbability is divided by 1000, and not 100
-int numSeconds = 1000, populationSize = 500, mutationProbability = 4, crossoverPoints = 2;
+// the probabilities are divided by 10k
+int numSeconds = 1000, populationSize = 300, mutationProbability = 10, crossoverPoints = 2;
 bool diversityMaintenance = false;
-bool uniformCrossover = true; int bernoulliProbability = 5;
+bool uniformCrossover = true; int bernoulliProbability = 400;
 
 struct Solution
 {
@@ -109,7 +109,7 @@ void generate_children(vector<Solution> &newPopulation, Solution child1, Solutio
     if (uniformCrossover)
     {
         for (int i = 0; i < Solution::N; i++)
-            crossover[i] = (rng() % 100 < bernoulliProbability);    
+            crossover[i] = (rng() % 10000 < bernoulliProbability);    
     }
     else if (diversityMaintenance)
     {
@@ -179,11 +179,11 @@ void generate_children(vector<Solution> &newPopulation, Solution child1, Solutio
     // Mutation
     for (int i = 0; i < Solution::N; i++)
     {
-        if (rng() % 1000 < mutationProbability)
+        if (rng() % 10000 < mutationProbability)
         {
             child1 = child1 ^ i;
         }
-        if (rng() % 1000 < mutationProbability)
+        if (rng() % 10000 < mutationProbability)
         {
             child2 = child2 ^ i;
         }
